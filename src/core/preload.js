@@ -1,12 +1,34 @@
 const { contextBridge, ipcRenderer } = require('electron')
+const { Socket } = require('electron-ipc-socket');
+const socket = new Socket(ipcRenderer);
 
-// contextBridge.exposeInMainWorld('darkMode', {
-//   toggle: () => ipcRenderer.invoke('dark-mode:toggle'),
-//   system: () => ipcRenderer.invoke('dark-mode:system'),
-// })
+socket.open('main-win');
 
 contextBridge.exposeInMainWorld(
   "api", {
+      sendMessageUsingSocket: () => {
+
+        socket.send('ready');
+        socket
+          .request('ping')
+          .then(content => console.log({content}))
+          .catch(err => console.error(err));
+      },
+      readFileUsingSocket: () => {
+
+        socket.send('ready');
+        socket
+          .request('file', 'styles.css')
+          .then(content => console.log({content}))
+          .catch(err => console.error(err));
+      },
+      getPingMessageFromMain: () => {
+        socket.onRequest('ping-event', async (req) => {
+          console.log(2222)
+          console.log({req});
+          return Math.random()*100 | 0
+        });
+      },
       send: (channel, data) => {
           // whitelist channels
           let validChannels = ["toMain"];

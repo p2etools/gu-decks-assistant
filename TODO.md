@@ -1,0 +1,2 @@
+- Fix bug socket auto send event
+- Disable the read files function

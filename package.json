@@ -20,6 +20,7 @@
     "electron": "^15.1.1"
   },
   "dependencies": {
+    "electron-ipc-socket": "^3.0.0",
     "electron-squirrel-startup": "^1.0.0"
   },
   "config": {

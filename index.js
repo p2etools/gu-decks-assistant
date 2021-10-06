@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, nativeTheme } = require('electron')
+const { Socket, Transport, Event, InboundRequest } = require('electron-ipc-socket')
 const path = require('path')
 
 const fs = require('fs');
@@ -7,18 +8,15 @@ const pathFile = path.join(__dirname, 'package.json');
 
 const data = fs.readFileSync(pathFile, 'utf-8');
 
-console.log(data);
-
-
-if(require('electron-squirrel-startup')) return;
+if (require('electron-squirrel-startup')) return;
 
 // modify your existing createWindow() function
-function createWindow () {
+function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
+    width: 200,
     height: 600,
     webPreferences: {
-      preload: path.join(__dirname, 'src', 'preload.js'),
+      preload: path.join(__dirname, 'src', 'core', 'preload.js'),
       contextIsolation: true,
       enableRemoteModule: false,
     },
@@ -32,6 +30,32 @@ function createWindow () {
   win.webContents.on('did-finish-load', () => {
     win.webContents.send('ping', 'whoooooooh!')
   })
+
+  const socket = new Socket(new Transport(ipcMain, win));
+  socket.open('main-win');
+
+  socket.onEvent('ready', evt => {
+    console.log('Renderer process is ready', { evt });
+  });
+
+  socket.onRequest('ping', req => {
+    console.log({ req })
+    return 'pong';
+  });
+
+  // Return data to renderer
+  socket.onRequest('file', async (req) => {
+    const data = fs.readFileSync(req.data, 'utf-8');
+    return data;
+  });
+
+  // Send data to renderer
+  setInterval(() => {
+    socket
+      .request('ping-event', 'styles.css')
+      .then(content => console.log({content}))
+      .catch(err => console.error(err));
+  }, 2000)
 
   ipcMain.handle('dark-mode:toggle', () => {
     if (nativeTheme.shouldUseDarkColors) {
