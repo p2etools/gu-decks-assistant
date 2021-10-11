@@ -16,6 +16,7 @@ Priority highest to lowest
 - [ ] Center event/crash logging
 - [ ] Handle new users (see file data.txt), due to cost problem thus I am not using database at the moment
 - [ ] Mac OS support (I do not have a lot of time this moment)
+- [ ] For some cards like `Deuteria, Manashard Mage` it will add another cards to player's deck
 
 ## Disclaimer:
 For GuDecks and Gods Unchained:
