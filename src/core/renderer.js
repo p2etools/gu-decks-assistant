@@ -56,7 +56,7 @@ setInterval(()=>{
       .appendTo(".current-player");
   }
   window
-    .$("<tr class='player-deck-row'><th>Card name" + "</th><th>Mana" + " </th><th> Quantity" +  "</th></tr>")
+    .$("<tr class='player-deck-row'><th>Card name" + "</th><th>Mana" + " </th><th> Remaining" +  "</th></tr>")
     .appendTo(".current-player");
   if(localStorage.playerData) {
     $.each(JSON.parse(localStorage.playerData).player.deck, (k,v) => {
@@ -74,10 +74,7 @@ setInterval(()=>{
       .appendTo(".opponent");
   }
   window
-    .$("<tr class='opponent-deck-row'><th>Card name" + "</th><th>Mana" + " </th><th> Quantity" +  "</th></tr>")
-    .appendTo(".opponent");
-  window
-    .$("<tr class='opponent-deck-row'><th>Card name" + "</th><th>Mana" + " </th><th> Quantity" +  "</th></tr>")
+    .$("<tr class='opponent-deck-row'><th>Card name" + "</th><th>Mana" + " </th><th> Remaining" +  "</th></tr>")
     .appendTo(".opponent");
   if(localStorage.opponentData) {
     $.each(JSON.parse(localStorage.opponentData).opponent.deck, (k,v) => {
