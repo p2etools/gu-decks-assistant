@@ -1,7 +1,7 @@
 {
-  "name": "gu-card-checkers",
-  "version": "1.0.0",
-  "description": "this is Gods Unchained tracker decks app",
+  "name": "gu-decks-assistant",
+  "version": "0.1.0",
+  "description": "this is Gods Unchained decks assistant app",
   "main": "index.js",
   "scripts": {
     "start": "electron-forge start",
