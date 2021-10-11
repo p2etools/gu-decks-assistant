@@ -1,2 +1,4 @@
 node_modules
-out/
+out
+example-log.txt
+api-error.log
