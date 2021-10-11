@@ -19,6 +19,18 @@ Priority highest to lowest
 - [ ] Mac OS support (I do not have a lot of time this moment)
 - [ ] For some cards like `Deuteria, Manashard Mage` it will add another cards to player's deck
 
+## Technology:
+- Electron
+- GuDecks and Gods Unchained API
+- Handle realtime communication between render/main process
+- Handle reading and parse large log files
+- Jquery (not so crazy or scary)
+- I wish I could add more :)
+
+## Alternative:
+- GU Deck trackers:
+https://github.com/JMoore11235/GU_Deck_Tracker
+
 ## Disclaimer:
 For GuDecks and Gods Unchained:
 - This app is using GuDecsk and Gods Unchained API, thank you for make awesome products
