@@ -5,18 +5,32 @@
     <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
     <!-- <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'"> -->
-    <title>GU cards assistant!</title>
+    <title>GU deck assistant!</title>
     <link rel="stylesheet" type="text/css" href="./styles.css" />
   </head>
   <body>
     <h1>Hell, I am your deck assistant</h1>
-    <p>Current theme source: <strong id="theme-source">System</strong></p>
+    <br />
+    <div class="player-form">
+      <p>Enter your player name below: </p>
+      <input name="player-name" type="text" class="player-name"/>
+      <br />
+      <button type="submit" class="submit-btn">Submit</button>
+      <div class="welcome-player"></div>
+    </div>
     <br />
     <button id="toggle-dark-mode">Toggle Dark Mode</button>
-    <br />
     <button id="reset-to-system">Reset to System Theme</button>
     <br />
-    <div class="names"></div>
+    <div class="deck-data">
+      <div class="current-player">
+
+      </div>
+      <div class="opponent">
+
+      </div>
+    </div>
+    <div class="test"></div>
 
     <!-- Insert this line above script imports  -->
     <script>

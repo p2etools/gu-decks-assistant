@@ -1,7 +1,52 @@
 @media (prefers-color-scheme: dark) {
-  body { background: #333; color: white; }
+  body {
+    background: #333;
+    color: white;
+  }
 }
 
 @media (prefers-color-scheme: light) {
-  body { background: #ddd; color: black; }
+  body {
+    background: #ddd;
+    color: black;
+  }
+}
+
+td {
+  padding: 5px;
+}
+th {
+  padding: 5px;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.deck-data {
+  margin: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  /* border: 1px red solid; */
+
+  padding: 5px;
+}
+
+.current-player {
+  margin: 5px 10px;
+}
+
+.opponent {
+  margin: 5px 10px;
+}
+
+.player-form {
+  text-align:center;
+}
+
+.submit-btn{
+  margin: 0 auto;
+  /* width: 50%; */
 }
