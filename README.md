@@ -11,9 +11,10 @@ Priority highest to lowest
 - [x] Get Opponent Decks
 - [ ] Need some helps from UI expert to make the app looks like a killer app ;)
 - [ ] Show remaining cards for both player (by remaining cards, it means those cards do not enter the boards)
-- [ ] Implement CI/CD for testing/release prebuilt app for new version
+- [ ] Implement CI/CD for testing/release prebuilt app for new versions (for new users)
+- [ ] Implement update app functions (for existing users)
 - [ ] Show icon for each items (can get from API or using local images) and description for each item (hover to see its)
-- [ ] Get Win rate overall for both player
+- [ ] Get win rate overall for both player (can be done easily using Gods Unchained API)
 - [ ] Handle error when sometimes the decks did not load successfully (due to API problems)
 - [ ] Center event/crash logging
 - [ ] Handle new users (see file data.txt), due to cost problem thus I am not using database at the moment
