@@ -9,6 +9,7 @@ Priority highest to lowest
 
 - [x] Get Player Decks
 - [x] Get Opponent Decks
+- [ ] Need some helps from UI expert to make the app looks like a killer app ;)
 - [ ] Show remaining cards for both player (by remaining cards, it means those cards do not enter the boards)
 - [ ] Implement CI/CD for testing/release prebuilt app for new version
 - [ ] Get Win rate overall for both player
