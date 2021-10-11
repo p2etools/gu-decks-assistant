@@ -1,2 +1,0 @@
-- Fix bug socket auto send event when start the app
-- Disable the read files function
