@@ -12,12 +12,15 @@ Priority highest to lowest
 - [ ] Need some helps from UI expert to make the app looks like a killer app ;)
 - [ ] Show remaining cards for both player (by remaining cards, it means those cards do not enter the boards)
 - [ ] Implement CI/CD for testing/release prebuilt app for new version
+- [ ] Show icon for each items (can get from API or using local images) and description for each item (hover to see its)
 - [ ] Get Win rate overall for both player
 - [ ] Handle error when sometimes the decks did not load successfully (due to API problems)
 - [ ] Center event/crash logging
 - [ ] Handle new users (see file data.txt), due to cost problem thus I am not using database at the moment
 - [ ] Mac OS support (I do not have a lot of time this moment)
 - [ ] For some cards like `Deuteria, Manashard Mage` it will add another cards to player's deck
+
+## How to install the app:
 
 ## Technology:
 - Electron
