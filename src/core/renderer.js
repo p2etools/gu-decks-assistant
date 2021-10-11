@@ -32,10 +32,58 @@ document
 //   await window.api.getPingMessageFromMain();
 // });
 
-var jsonNames = { Mohamed: "saad", joseph: "Dankwah", Christian: "mensah" };
+// $(".player-form").submit(function(event) {
+//   alert( "Handler for .submit() called." );
+//   console.log(1234)
+//   event.preventDefault();
+// });
 
-window.$.each(jsonNames, function (key, val) {
+$(".submit-btn").click(function(event) {
+  event.preventDefault();
+  $(".welcome-player").empty();
+  const playerName = $('.player-name').val();
+  window.localStorage.setItem('playerName', playerName);
   window
-    .$("<tr><td>" + key + "</td><td>" + val + "</td</tr>")
-    .appendTo(".names");
+    .$(`<p>Welcome ${playerName}</p>`)
+    .appendTo(".welcome-player");
 });
+
+setInterval(()=>{
+  $(".current-player").empty()
+  if(localStorage.playerData) {
+    window
+      .$(`<strong>Player Name: ${JSON.parse(localStorage.playerData).player.name}<strong>`)
+      .appendTo(".current-player");
+  }
+  window
+    .$("<tr class='player-deck-row'><th>Card name" + "</th><th>Mana" + " </th><th> Quantity" +  "</th></tr>")
+    .appendTo(".current-player");
+  if(localStorage.playerData) {
+    $.each(JSON.parse(localStorage.playerData).player.deck, (k,v) => {
+      window
+        .$("<tr class='player-deck-row'><td>" + v.name + "</td><td>" + v.mana + " </td><td>" + v.count +  "</td></tr>")
+        .appendTo(".current-player");
+    });
+  }
+}, 3000)
+setInterval(()=>{
+  $(".opponent").empty()
+  if(localStorage.playerData) {
+    window
+      .$(`<strong>Opponent Name: ${JSON.parse(localStorage.opponentData).opponent.name}<strong>`)
+      .appendTo(".opponent");
+  }
+  window
+    .$("<tr class='opponent-deck-row'><th>Card name" + "</th><th>Mana" + " </th><th> Quantity" +  "</th></tr>")
+    .appendTo(".opponent");
+  window
+    .$("<tr class='opponent-deck-row'><th>Card name" + "</th><th>Mana" + " </th><th> Quantity" +  "</th></tr>")
+    .appendTo(".opponent");
+  if(localStorage.opponentData) {
+    $.each(JSON.parse(localStorage.opponentData).opponent.deck, (k,v) => {
+      window
+        .$("<tr class='opponent-deck-row'><td>" + v.name + "</td><td>" + v.mana + " </td><td>" + v.count +  "</td></tr>")
+        .appendTo(".opponent");
+    });
+  }
+}, 3000)
