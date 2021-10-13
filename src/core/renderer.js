@@ -24,12 +24,9 @@ document
 //   await window.api.readFileUsingSocket();
 // });
 
-// document.getElementById("poll-messages").addEventListener("click", async () => {
-//   setInterval(() => {
-//     console.log(window.localStorage.getItem("thekey2"))
-//     document.getElementById("current-data").innerHTML = "Current data is: " + window.localStorage.getItem("thekey3")
-//   }, 1000)
-//   await window.api.getPingMessageFromMain();
+// document.getElementById("reload-deck").addEventListener("click", async () => {
+//   await window.api.sendRequestToGetNewLogFiles();
+//   await window.api.getDeckData();
 // });
 
 // $(".player-form").submit(function(event) {
@@ -43,13 +40,15 @@ $(".submit-btn").click(function(event) {
   $(".welcome-player").empty();
   const playerName = $('.player-name').val();
   window.localStorage.setItem('playerName', playerName);
+  window.api.setPlayerName(playerName)
   window
     .$(`<p>Welcome ${playerName}</p>`)
     .appendTo(".welcome-player");
 });
 
-setInterval(()=>{
+setInterval(async ()=>{
   $(".current-player").empty()
+  await window.api.getDeckData();
   if(localStorage.playerData) {
     window
       .$(`<strong>Player Name: ${JSON.parse(localStorage.playerData).player.name}<strong>`)
@@ -66,8 +65,9 @@ setInterval(()=>{
     });
   }
 }, 3000)
-setInterval(()=>{
+setInterval(async ()=>{
   $(".opponent").empty()
+  await window.api.getDeckData();
   if(localStorage.playerData) {
     window
       .$(`<strong>Opponent Name: ${JSON.parse(localStorage.opponentData).opponent.name}<strong>`)

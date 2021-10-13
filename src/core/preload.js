@@ -6,26 +6,56 @@ const socket = new Socket(ipcRenderer);
 socket.open("main-win");
 
 contextBridge.exposeInMainWorld("api", {
-  sendMessageUsingSocket: () => {
-    socket.send("ready");
+  sendRequestToGetNewLogFiles: () => {
+    // socket.send("ready");
     socket
-      .request("ping")
-      .then((content) => console.log({ content }))
+      .request("reload-deck")
+      .then()
       .catch((err) => console.error(err));
   },
-  readFileUsingSocket: () => {
-    socket.send("ready");
+  getDeckData: () => {
+    // socket.send("ready");
     socket
-      .request("file", "styles.css")
-      .then((content) => console.log({ content }))
+      .request("get-deck-data")
+      .then((response) => {
+        // console.log({response})
+        if(response.playerData) {
+          window.localStorage.setItem('playerData', JSON.stringify(response.playerData))
+        }
+        if(response.opponentData) {
+          window.localStorage.setItem('opponentData', JSON.stringify(response.opponentData))
+        }
+      })
       .catch((err) => console.error(err));
   },
-  getPingMessageFromMain: () => {
-    socket.onRequest("ping-event", async (req) => {
-      console.log({ req });
-      return (Math.random() * 100) | 0;
-    });
+  setPlayerName: (playerName) => {
+    socket
+      .request("set-player-name", {playerName})
+      .then((response) => {
+        console.log({responseSetPlayerName: response})
+      })
+      .catch((err) => console.error(err));
   },
+  // sendMessageUsingSocket: () => {
+  //   socket.send("ready");
+  //   socket
+  //     .request("ping")
+  //     .then((content) => console.log({ content }))
+  //     .catch((err) => console.error(err));
+  // },
+  // readFileUsingSocket: () => {
+  //   socket.send("ready");
+  //   socket
+  //     .request("file", "styles.css")
+  //     .then((content) => console.log({ content }))
+  //     .catch((err) => console.error(err));
+  // },
+  // getPingMessageFromMain: () => {
+  //   socket.onRequest("ping-event", async (req) => {
+  //     console.log({ req });
+  //     return (Math.random() * 100) | 0;
+  //   });
+  // },
   send: (channel, data) => {
     // whitelist channels
     let validChannels = ["toMain"];

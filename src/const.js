@@ -2,6 +2,10 @@ const os = require("os");
 const { username } = os.userInfo();
 
 const logFileLocation = `C:\\Users\\${username}\\AppData\\LocalLow\\FuelGames`;
+const logAppLocation = `C:\\Users\\${username}\\AppData\\LocalLow`;
+const logPlayerDataLocation = `${logAppLocation}\\player.json`
+const logOpponentDataLocation = `${logAppLocation}\\opponent.json`
+const playerInfoLocation = `${logAppLocation}\\playerinfo.txt`
 
 const combatFolderSubString = "Combat_Recorder";
 
@@ -40,6 +44,9 @@ const godPowerObj = {
 
 module.exports = {
   logFileLocation,
+  logPlayerDataLocation,
+  logOpponentDataLocation,
+  playerInfoLocation,
   combatFolderSubString,
   readLogIntervalTime,
   godPowerObj,

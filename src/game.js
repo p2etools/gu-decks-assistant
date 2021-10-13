@@ -1,18 +1,22 @@
 const fs = require("fs");
 const axios = require("axios");
 const axiosRetry = require("axios-retry");
+const NodeCache = require("node-cache");
 
 const {
   logFileLocation,
+  logPlayerDataLocation,
+  logOpponentDataLocation,
   combatFolderSubString,
   readLogIntervalTime,
   godPowerObj,
   guDeckPlayerEndpoint,
   guCardDecodeEndpoint,
 } = require("./const");
-const { match } = require("assert");
-// console.log({logFileLocation})
 
+const myCache = new NodeCache( { stdTTL: 600, checkperiod: 100 } );
+
+const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 axiosRetry(axios, {
   retries: 3, // number of retries
   retryDelay: (retryCount) => {
@@ -90,35 +94,39 @@ function findFolderIncludeName(pathToFolder, name) {
   }
 }
 
-function getLatestLogFile() {
-  try {
-    // it will return something like:
-    // C:\Users\username\AppData\LocalLow\FuelGames\Gods Unchained - Version 0.39.0.2485(2021.8.19) - Built at 12_44_09
-    const latestGameFolder = getLatestFolder(logFileLocation);
-    console.log({ latestGameFolder });
+// async function getLatestLogFile() {
+//   try {
+//     // it will return something like:
+//     // C:\Users\username\AppData\LocalLow\FuelGames\Gods Unchained - Version 0.39.0.2485(2021.8.19) - Built at 12_44_09
+//     const latestGameFolder = getLatestFolder(logFileLocation);
+//     console.log({ latestGameFolder });
 
-    const latestGameLogFolder = getLatestFolder(`${latestGameFolder}\\logs`, [
-      "latest",
-    ]);
+//     const latestGameLogFolder = getLatestFolder(`${latestGameFolder}\\logs`, [
+//       "latest",
+//     ]);
 
-    const latestMatchFolder = getLatestFolder(latestGameLogFolder);
-    console.log({ latestMatchFolder });
-    const latestLogFolderLocation = findFolderIncludeName(
-      latestMatchFolder,
-      combatFolderSubString
-    );
-    console.log({ latestLogFolderLocation });
-    const [latestLogFile] = fs.readdirSync(latestLogFolderLocation);
-    console.log({ latestLogFile });
+//     const latestMatchFolder = getLatestFolder(latestGameLogFolder);
+//     console.log({ latestMatchFolder });
+//     let latestLogFolderLocation;
+//     while (!latestLogFolderLocation) {
+//       await delay(2000);
+//       latestLogFolderLocation = findFolderIncludeName(
+//         latestMatchFolder,
+//         combatFolderSubString
+//       );
+//     }
+//     console.log({ latestLogFolderLocation });
+//     const [latestLogFile] = fs.readdirSync(latestLogFolderLocation);
+//     console.log({ latestLogFile });
 
-    const latestLogFileLocation = `${latestLogFolderLocation}\\${latestLogFile}`;
+//     const latestLogFileLocation = `${latestLogFolderLocation}\\${latestLogFile}`;
 
-    console.log(latestLogFileLocation);
-    return latestLogFileLocation;
-  } catch (error) {
-    return;
-  }
-}
+//     console.log(latestLogFileLocation);
+//     return latestLogFileLocation;
+//   } catch (error) {
+//     return;
+//   }
+// }
 
 // Get data from log file
 // We will use localStorage here
@@ -137,34 +145,27 @@ function getLatestLogFile() {
 //   }
 // }
 
-// This object will be get from initialized each time user click load data
-const playersData = {
-  player: {
-    username: "",
-    userid: "",
-    god: "",
-    encodedDeck: "",
-    deck: [],
-    winrate: 0,
-  },
-  opponent: {
-    username: "",
-    userid: "",
-    god: "",
-    encodedDeck: "",
-    deck: [],
-    winrate: 0,
-  },
-};
-
 // function getPlayerName() {
 //   return "chaugiang";
 // }
 
 function getPlayerID(playerName) {
-  const userData = require('../data.json')
-  // const playerID = userData[playerName];
-  return userData[playerName]
+  let playerID = myCache.get(playerName)
+  if(playerID === undefined) {
+    console.log('PlayerID is undefined, find from data.json')
+    const userData = require('../data.json')
+    playerID = userData[playerName];
+
+    if (playerID === undefined) {
+      console.log('PlayerID does not exist, set it to empty string')
+      myCache.set(playerName, '', 1000);
+      return '';
+    }
+    myCache.set(playerName, playerID, 1000);
+    return playerID;
+  }
+  console.log('HIT: Get player id from cache')
+  return playerID;
 }
 
 
@@ -176,13 +177,15 @@ function getPlayerID(playerName) {
 // }
 
 async function getDeckFromAPI(playerID, currentGod) {
+  const url = guDeckPlayerEndpoint + playerID;
+  console.log({url})
   const option = {
     method: "GET",
-    url: guDeckPlayerEndpoint + playerID,
+    url,
   };
   try {
     const res = await axios(option);
-    if (!res.data) return;
+    if (!res.data || (res.data.length===0)) return;
     for (const match of res.data) {
       let isWin = false;
       if (match.player_won + "" === playerID) {
@@ -206,7 +209,6 @@ async function getDeckFromAPI(playerID, currentGod) {
 
 async function getListCardFromAPI(deckEncodedString) {
   const listCardID = deckEncodedString.split(",");
-  console.log(listCardID);
 
   const baseOption = {
     method: "GET",
@@ -241,7 +243,6 @@ async function getGodNameAndUserIDAndDeck(string, playerName) {
   const userPath = userName === playerName ? "player" : "opponent";
   // playersData[userPath].username = userName;
   const godPower = string.match(/Set Power To: (.+)/)[1].toLowerCase();
-  console.log({ godPower, userName, playerName });
   let godName;
   for (const gp in godPowerObj) {
     if (godPower.includes(gp)) {
@@ -254,17 +255,50 @@ async function getGodNameAndUserIDAndDeck(string, playerName) {
   console.log({playerID})
 
   let playerData;
-  if(!playerID) {
+  if(!playerID || userName.toLowerCase() === 'ai') {
     playerData = {
       [userPath]: {
         godName,
         name: userName,
       }
     }
-    return JSON.stringify(playerData, null, 2);;
+    if(playerData.player) {
+      fs.writeFileSync(logPlayerDataLocation, JSON.stringify(playerData), 'utf-8')
+    }
+    if(playerData.opponent) {
+      fs.writeFileSync(logOpponentDataLocation, JSON.stringify(playerData), 'utf-8')
+    }
+    return;
   }
+
+
   const deckData = await getDeckFromAPI(playerID, godName);
-  const listCard = await getListCardFromAPI(deckData);
+  if(!deckData) {
+    playerData = {
+      [userPath]: {
+        godName,
+        name: userName,
+      }
+    }
+    if(playerData.player) {
+      fs.writeFileSync(logPlayerDataLocation, JSON.stringify(playerData), 'utf-8')
+    }
+    if(playerData.opponent) {
+      fs.writeFileSync(logOpponentDataLocation, JSON.stringify(playerData), 'utf-8')
+    }
+    return;
+  }
+  let listCard;
+  listCard = myCache.get(`${playerID}_cards`)
+  if(!listCard) {
+    console.log("Player's Deck data is not cache.")
+    listCard = await getListCardFromAPI(deckData);
+    myCache.set(`${playerID}_cards`, listCard)
+    console.log("Set player's Deck in cache.")
+  } else {
+    console.log("HIT, got Player's Deck data from cache")
+  }
+
   const tmpObj = {};
   for (const cardData of listCard) {
     if (!tmpObj[cardData.name]) {
@@ -288,7 +322,13 @@ async function getGodNameAndUserIDAndDeck(string, playerName) {
       deck: data,
     }
   }
-  return JSON.stringify(playerData, null, 2);
+  if(playerData.player) {
+    fs.writeFileSync(logPlayerDataLocation, JSON.stringify(playerData), 'utf-8')
+  }
+  if(playerData.opponent) {
+    fs.writeFileSync(logOpponentDataLocation, JSON.stringify(playerData), 'utf-8')
+  }
+  // return JSON.stringify(playerData, null, 2);
 }
 async function getDataFromLine(string, playerName) {
   if (string.includes("Set Power")) {
@@ -309,7 +349,7 @@ async function getUserMatch() {
 async function getUserGod() {}
 
 module.exports = {
-  getLatestLogFile,
+  delay,
   getUserID,
   getUserMatch,
   getUserGod,
