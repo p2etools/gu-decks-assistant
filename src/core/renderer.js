@@ -46,6 +46,14 @@ $(".submit-btn").click(function(event) {
     .appendTo(".welcome-player");
 });
 
+if(localStorage.playerName) {
+  $(".welcome-player").empty();
+  window.api.setPlayerName(localStorage.playerName)
+  window
+    .$(`<p>Welcome ${localStorage.playerName}</p>`)
+    .appendTo(".welcome-player");
+}
+
 setInterval(async ()=>{
   $(".current-player").empty()
   await window.api.getDeckData();
