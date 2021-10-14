@@ -2,7 +2,7 @@
 
 This is your Gods Unchained Assistant and still under development
 
-![GuDeck Assistant](https://i.imgur.com/LRJbXKc.png)
+![GuDeck Assistant](https://i.imgur.com/UUZ8T9d.png)
 
 ## Features (need helps):
 Priority highest to lowest
