@@ -2,6 +2,8 @@
 const fs = require('fs')
 const chokidar = require('chokidar');
 const readline = require('readline');
+const NodeCache = require("node-cache");
+const myCache = new NodeCache( { stdTTL: 600, checkperiod: 100 } );
 
 const {
   logFileLocation,
@@ -30,16 +32,7 @@ async function processLineByLine(path, playerName) {
 }
 
 async function processLog() {
-  let playerName;
 
-  while(!playerName) {
-    try {
-      playerName = fs.readFileSync(playerInfoLocation, 'utf-8')
-      await delay(3000)
-    } catch (error) {
-
-    }
-  }
   const watcher = chokidar.watch(`${logFileLocation}\\**\\*Combat_Recorder_info.txt`, {
     persistent: true,
     ignored: [`${logFileLocation}\\**\\logs\\latest\\Combat_Recorder\\Combat_Recorder_info.txt`],
@@ -47,8 +40,24 @@ async function processLog() {
 
   watcher
     .on('change', async path => {
+      let guDeckAssistantPlayer = myCache.get('guDeckAssistantPlayer')
+      if(guDeckAssistantPlayer === undefined) {
+        try {
+          guDeckAssistantPlayer = fs.readFileSync(playerInfoLocation, 'utf-8')
+        } catch (error) {
+
+        }
+        if (guDeckAssistantPlayer === undefined) {
+          //
+        } else {
+          myCache.set('guDeckAssistantPlayer', '', 1000);
+          processLineByLine(path, guDeckAssistantPlayer);
+      }
+      } else {
+        processLineByLine(path, guDeckAssistantPlayer);
+      }
       // console.log(`File ${path} has been changed`)
-      processLineByLine(path, playerName);
+
     })
 }
 processLog();
