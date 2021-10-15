@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, nativeTheme } = require("electron");
+const { app, BrowserWindow, ipcMain, nativeTheme, autoUpdater } = require("electron");
 const {
   Socket,
   Transport,
