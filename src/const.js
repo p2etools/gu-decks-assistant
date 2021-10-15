@@ -51,4 +51,5 @@ module.exports = {
   godPowerObj,
   guDeckPlayerEndpoint,
   guCardDecodeEndpoint,
+  logFileLocation,
 };

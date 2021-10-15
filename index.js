@@ -10,11 +10,15 @@ const isDev = require('electron-is-dev');
 
 const { logPlayerDataLocation, logOpponentDataLocation, playerInfoLocation } = require("./src/const");
 
-if (require("electron-squirrel-startup")) return;
-require('./src/processLog')
 
 
-if (!isDev) {
+
+
+if (isDev) {
+  const fsExtra = require('fs-extra')
+  const localPath = 'C:/Users/' + require("os").userInfo().username + '/AppData/Roaming/gu-decks-assistant/Local Storage'
+  fsExtra.emptyDirSync(localPath)
+} else {
   const server = 'https://update.electronjs.org'
   const feed = `${server}/p2etools/gu-decks-assistant/${process.platform}-${process.arch}/${app.getVersion()}`
 
@@ -24,6 +28,10 @@ if (!isDev) {
     autoUpdater.checkForUpdates()
   }, 10 * 60 * 1000)
 }
+
+if (require("electron-squirrel-startup")) return;
+
+require('./src/processLog')
 
 async function createWindow() {
   const win = new BrowserWindow({

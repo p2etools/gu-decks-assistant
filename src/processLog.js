@@ -11,7 +11,6 @@ const {
 } = require('./const')
 
 const {
-  // delay,
   getGodNameAndUserIDAndDeck,
 } = require('./game')
 
@@ -25,7 +24,6 @@ async function processLineByLine(path, playerName) {
 
   for await (const line of rl) {
     if (line.includes("Set Power")) {
-      // console.log(line)
       await getGodNameAndUserIDAndDeck(line, playerName);
     }
   }
@@ -53,13 +51,10 @@ async function processLog() {
         } else {
           myCache.set('guDeckAssistantPlayer', guDeckAssistantPlayer, 1000);
           processLineByLine(path, guDeckAssistantPlayer);
-      }
+        }
       } else {
         processLineByLine(path, guDeckAssistantPlayer);
       }
     })
 }
 processLog();
-// module.exports = {
-//   processLog,
-// }
