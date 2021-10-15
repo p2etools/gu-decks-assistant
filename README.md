@@ -37,13 +37,14 @@ Priority highest to lowest
 - The app is using auto updater so you will always have the latest update
 
 ## Demo videos:
-- Install the app:
+- Install the app (click to play):
 
-https://youtu.be/7wn940rGdjc
+[![1. Install GU Decks Assistant](https://i.ytimg.com/vi/7wn940rGdjc/0.jpg)](https://youtu.be/7wn940rGdjc)
 
-- A sample game with the app:
 
-https://youtu.be/7wn940rGdjc
+- A sample game with the app (click to play):
+
+[![1. Install GU Decks Assistant](https://i.ytimg.com/vi/eSqllxM2Nu8/0.jpg)](https://youtu.be/eSqllxM2Nu8)
 
 ## Technologies:
 - Electron
