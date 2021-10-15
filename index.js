@@ -25,7 +25,7 @@ if (!isDev) {
   }, 10 * 60 * 1000)
 }
 
-function createWindow() {
+async function createWindow() {
   const win = new BrowserWindow({
     width: 615,
     height: 726,
@@ -48,6 +48,9 @@ function createWindow() {
   win.setAlwaysOnTop(true, 'screen');
   const socket = new Socket(new Transport(ipcMain, win));
   socket.open("main-win");
+  let version = app.getVersion();
+  version = JSON.stringify(version)
+  await win.webContents.executeJavaScript(`localStorage.setItem("appVersion", ${version})`, true)
 
   socket.onEvent("ready", (evt) => {
     console.log("Renderer process is ready", { evt });

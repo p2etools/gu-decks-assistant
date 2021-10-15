@@ -40,6 +40,7 @@ async function processLog() {
 
   watcher
     .on('change', async path => {
+      // console.log(`File ${path} has been changed`)
       let guDeckAssistantPlayer = myCache.get('guDeckAssistantPlayer')
       if(guDeckAssistantPlayer === undefined) {
         try {
@@ -50,14 +51,12 @@ async function processLog() {
         if (guDeckAssistantPlayer === undefined) {
           //
         } else {
-          myCache.set('guDeckAssistantPlayer', '', 1000);
+          myCache.set('guDeckAssistantPlayer', guDeckAssistantPlayer, 1000);
           processLineByLine(path, guDeckAssistantPlayer);
       }
       } else {
         processLineByLine(path, guDeckAssistantPlayer);
       }
-      // console.log(`File ${path} has been changed`)
-
     })
 }
 processLog();

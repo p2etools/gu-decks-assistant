@@ -13,6 +13,8 @@ document
     window.api.sendMessageUsingSocket();
   });
 
+document.getElementById("app-version").innerText = localStorage.getItem('appVersion')
+
 document
   .getElementById("reset-to-system")
   .addEventListener("click", async () => {

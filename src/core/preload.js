@@ -36,26 +36,6 @@ contextBridge.exposeInMainWorld("api", {
       })
       .catch((err) => console.error(err));
   },
-  // sendMessageUsingSocket: () => {
-  //   socket.send("ready");
-  //   socket
-  //     .request("ping")
-  //     .then((content) => console.log({ content }))
-  //     .catch((err) => console.error(err));
-  // },
-  // readFileUsingSocket: () => {
-  //   socket.send("ready");
-  //   socket
-  //     .request("file", "styles.css")
-  //     .then((content) => console.log({ content }))
-  //     .catch((err) => console.error(err));
-  // },
-  // getPingMessageFromMain: () => {
-  //   socket.onRequest("ping-event", async (req) => {
-  //     console.log({ req });
-  //     return (Math.random() * 100) | 0;
-  //   });
-  // },
   send: (channel, data) => {
     // whitelist channels
     let validChannels = ["toMain"];
@@ -86,8 +66,3 @@ window.addEventListener("DOMContentLoaded", () => {
     replaceText(`${dependency}-version`, process.versions[dependency]);
   }
 });
-// document.addEventListener("DOMNodeInserted", function(event) {
-//   if (!!window && !(!!window.$)) {
-//       window.$ = window.jQuery = require('../../jquery.min.js');
-//   }
-// });
