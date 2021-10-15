@@ -16,7 +16,7 @@ require('./src/processLog')
 
 if (!isDev) {
   const server = 'https://update.electronjs.org'
-  const feed = `${server}/bugb/electron-update-and-publish-example/${process.platform}-${process.arch}/${app.getVersion()}`
+  const feed = `${server}/p2etools/gu-decks-assistant/${process.platform}-${process.arch}/${app.getVersion()}`
 
   autoUpdater.setFeedURL(feed)
 
