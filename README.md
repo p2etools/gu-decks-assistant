@@ -4,7 +4,7 @@ This is your Gods Unchained Assistant and still under development.
 
 ### Warning
 
-Due this is young and free software and it may not work in your computer
+Due this is a young and free software and it may not work in your computer
 
 See: https://stackoverflow.com/questions/63470436/what-is-the-best-way-to-publish-an-electron-application-in-order-to-avoid-window
 
@@ -28,20 +28,21 @@ Priority highest to lowest
 - [ ] Handle error when sometimes the decks did not load successfully (due to API problems)
 - [ ] Center event/crash logging
 - [ ] Handle new users (see file data.txt), due to cost problem thus I am not using database at the moment
-- [ ] Mac OS support (I do not have a lot of time this moment)
+- [ ] Supported MacOS (I do not have a lot of time this moment)
 - [ ] For some cards like `Deuteria, Manashard Mage` it will add another cards to player's deck
 
 ## How to install the app:
+- Make sure you are using Windows, version 10 will be better, not sure for another versions
 - Go to the [release page](https://github.com/p2etools/gu-decks-assistant/releases), download and install the latest build (.exe)
 - The app is using auto updater so you will always have the latest update
 
-## Demo video:
+## Demo videos:
 - Comming soon
 
-## Technology:
+## Technologies:
 - Electron
 - GuDecks and Gods Unchained API
-- Handle realtime communication between render/main process
+- Handle realtime communication between render and main process
 - <del>Handle reading and parse large log files</del>
 - Jquery (not so crazy or scary)
 - I wish I could add more :)
@@ -50,7 +51,7 @@ Priority highest to lowest
 - GU Deck trackers:
 https://github.com/JMoore11235/GU_Deck_Tracker
 
-## Disclaimer:
+## Disclaimers:
 For GuDecks and Gods Unchained:
 - This app is using GuDecsk and Gods Unchained API, thank you for make awesome products.
 
