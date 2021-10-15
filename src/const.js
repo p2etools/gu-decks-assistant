@@ -6,6 +6,7 @@ const logAppLocation = `C:\\Users\\${username}\\AppData\\LocalLow`;
 const logPlayerDataLocation = `${logAppLocation}\\player.json`
 const logOpponentDataLocation = `${logAppLocation}\\opponent.json`
 const playerInfoLocation = `${logAppLocation}\\playerinfo.txt`
+const logErrorLocation = `${logAppLocation}\\err-log-gudeckassistant.txt`
 
 const combatFolderSubString = "Combat_Recorder";
 
@@ -43,12 +44,10 @@ const godPowerObj = {
 };
 
 module.exports = {
-  logFileLocation,
   logPlayerDataLocation,
   logOpponentDataLocation,
   playerInfoLocation,
-  combatFolderSubString,
-  readLogIntervalTime,
+  logErrorLocation,
   godPowerObj,
   guDeckPlayerEndpoint,
   guCardDecodeEndpoint,

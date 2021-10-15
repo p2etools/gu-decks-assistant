@@ -4,11 +4,9 @@ const axiosRetry = require("axios-retry");
 const NodeCache = require("node-cache");
 
 const {
-  logFileLocation,
   logPlayerDataLocation,
   logOpponentDataLocation,
-  combatFolderSubString,
-  readLogIntervalTime,
+  logErrorLocation,
   godPowerObj,
   guDeckPlayerEndpoint,
   guCardDecodeEndpoint,
@@ -246,16 +244,15 @@ async function getGodNameAndUserIDAndDeck(string, playerName) {
   let godName;
   for (const gp in godPowerObj) {
     if (godPower.includes(gp)) {
-      // playersData[userPath].god = godPowerObj[gp];
       godName = godPowerObj[gp];
       break;
     }
   }
   const playerID = getPlayerID(userName)
-  console.log({playerID})
 
   let playerData;
   if(!playerID || userName.toLowerCase() === 'ai') {
+    fs.appendFileSync(logErrorLocation, `can not find player id with name: ${userName}`)
     playerData = {
       [userPath]: {
         godName,
@@ -274,6 +271,7 @@ async function getGodNameAndUserIDAndDeck(string, playerName) {
 
   const deckData = await getDeckFromAPI(playerID, godName);
   if(!deckData) {
+    fs.appendFileSync(`can not find deck data for username ${userName}, userid: ${playerID}`)
     playerData = {
       [userPath]: {
         godName,
