@@ -54,12 +54,13 @@ https://github.com/JMoore11235/GU_Deck_Tracker
 For GuDecks and Gods Unchained:
 - This app is using GuDecsk and Gods Unchained API, thank you for make awesome products.
 
-Please do not worry, I do not want to abuse your API, have save user data to a file named `data.json` and also implement caching so the app wont call your API too much, I promise
+  Please do not worry, I do not want to abuse your API, have save user data to a file named `data.json` and also implement caching so the app wont call your API too much, I promise
 
 - By the way, if it violates anything under your policies please do not hesitate to open issues at the repository
 
 For players:
 - It cannot ensure your wins so please use it at your own risk
+- The app does not collect or process any your data
 
 For contributors:
 - If you have any ideas for the app, please drop your messages :)
