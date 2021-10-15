@@ -2,14 +2,11 @@
 name: Build
 
 on:
-  push:
-    # branches:
-    #   - main
-    tags:
-      - v.*
+  create:
 
 jobs:
   bundle:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ${{ matrix.platform.host }}
     strategy:
       matrix:
@@ -37,6 +34,7 @@ jobs:
           name: bundled-app-${{ matrix.platform.target }}-${{ matrix.platform.arch }}
           path: bundled-app-${{ matrix.platform.target }}-${{ matrix.platform.arch }}.tar
   installers:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: bundle
     runs-on: ${{ matrix.distributable.os }}
     strategy:
@@ -77,6 +75,7 @@ jobs:
             out/make
             out/publish-dry-run
   publish:
+    if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: installers
     runs-on: windows-latest
     steps:
