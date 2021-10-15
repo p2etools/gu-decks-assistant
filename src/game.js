@@ -271,7 +271,7 @@ async function getGodNameAndUserIDAndDeck(string, playerName) {
 
   const deckData = await getDeckFromAPI(playerID, godName);
   if(!deckData) {
-    fs.appendFileSync(`can not find deck data for username ${userName}, userid: ${playerID}`)
+    fs.appendFileSync(logErrorLocation, `can not find deck data for username ${userName}, userid: ${playerID}`)
     playerData = {
       [userPath]: {
         godName,
