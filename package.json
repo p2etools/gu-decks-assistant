@@ -1,6 +1,6 @@
 {
   "name": "gu-decks-assistant",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "this is Gods Unchained decks assistant app",
   "main": "index.js",
   "scripts": {
