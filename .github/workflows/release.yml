@@ -1,0 +1,108 @@
+
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v.*
+  pull_request:
+
+jobs:
+  bundle:
+    runs-on: ${{ matrix.platform.host }}
+    strategy:
+      matrix:
+        platform:
+          - host: windows-latest
+            target: win32
+            arch: x64
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.2.0
+        with:
+          node-version: 14.x
+          cache: npm
+      - name: Bundle app
+        uses: electron-forge/bundle-action@main
+        with:
+          target-arch: ${{ matrix.platform.arch }}
+          target-platform: ${{ matrix.platform.target }}
+      - name: Archive bundled app
+        run: tar cvf bundled-app-${{ matrix.platform.target }}-${{ matrix.platform.arch }}.tar out
+      - name: Save bundled app
+        uses: actions/upload-artifact@v2
+        with:
+          name: bundled-app-${{ matrix.platform.target }}-${{ matrix.platform.arch }}
+          path: bundled-app-${{ matrix.platform.target }}-${{ matrix.platform.arch }}.tar
+  installers:
+    needs: bundle
+    runs-on: ${{ matrix.distributable.os }}
+    strategy:
+      matrix:
+        distributable:
+          - os: Windows-latest
+            platform: win32
+            arch: x64
+            maker: squirrel
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download bundled app artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: bundled-app-${{ matrix.distributable.platform }}-${{ matrix.distributable.arch }}
+      - name: Unarchive bundled app
+        shell: bash
+        run: tar xvf bundled-app-${{ matrix.distributable.platform }}-${{ matrix.distributable.arch }}.tar
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.2.0
+        with:
+          node-version: 14.x
+          cache: npm
+      - name: Generate distributables
+        uses: electron-forge/distributable-action@feat/publish-dry-run
+        with:
+          target-maker: "@electron-forge/maker-${{ matrix.distributable.maker }}"
+          target-arch: ${{ matrix.distributable.arch }}
+          target-platform: ${{ matrix.distributable.platform }}
+      - name: Fix Windows-generated dry run files
+        if: matrix.distributable.platform == 'win32'
+        run: node ci/fix-artifact-paths.js
+      - name: Save distributable
+        uses: actions/upload-artifact@v2
+        with:
+          name: distributable-${{ matrix.distributable.maker }}-${{ matrix.distributable.platform }}-${{ matrix.distributable.arch }}
+          path: |
+            out/make
+            out/publish-dry-run
+  publish:
+    needs: installers
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Download all artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+      - name: Move distributable/publishing artifacts to out/
+        run: |
+          rm -r artifacts/bundled-app*
+          mkdir out
+          Get-ChildItem -Path artifacts/distributable-*/* | Copy-Item -Destination out/ -Recurse
+      - name: Display structure of downloaded files
+        run: tree out
+      - name: Setup Node.js
+        uses: actions/setup-node@v2.2.0
+        with:
+          node-version: 14.x
+          cache: npm
+      - name: Install Node.js dependencies
+        run: npm i
+      - name: Publish Electron app
+        # if: startsWith(github.ref, 'refs/tags/')
+        run: npm run publish --from-dry-run
+        env:
+          DEBUG: electron-forge:*
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
