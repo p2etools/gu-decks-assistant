@@ -4,10 +4,11 @@
   "description": "this is Gods Unchained decks assistant app",
   "main": "index.js",
   "scripts": {
-    "start": "electron-forge start",
-    "package": "electron-forge package",
-    "make": "electron-forge make",
-    "format-code": "npx prettier --write ."
+    "start": "npx electron-forge start",
+    "package": "npx electron-forge package",
+    "make": "npx electron-forge make",
+    "format-code": "npx prettier --write .",
+    "publish": "npx electron-forge publish"
   },
   "keywords": [],
   "author": "bugb",
