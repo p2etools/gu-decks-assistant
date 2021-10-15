@@ -14,10 +14,15 @@ if (require("electron-squirrel-startup")) return;
 require('./src/processLog')
 
 
-if (isDev) {
-	console.log('Running in development');
-} else {
-	console.log('Running in production');
+if (!isDev) {
+  const server = 'https://update.electronjs.org'
+  const feed = `${server}/bugb/electron-update-and-publish-example/${process.platform}-${process.arch}/${app.getVersion()}`
+
+  autoUpdater.setFeedURL(feed)
+
+  setInterval(() => {
+    autoUpdater.checkForUpdates()
+  }, 10 * 60 * 1000)
 }
 
 function createWindow() {
