@@ -37,7 +37,13 @@ Priority highest to lowest
 - The app is using auto updater so you will always have the latest update
 
 ## Demo videos:
-- Comming soon
+- Install the app:
+
+https://youtu.be/7wn940rGdjc
+
+- A sample game with the app:
+
+https://youtu.be/7wn940rGdjc
 
 ## Technologies:
 - Electron
